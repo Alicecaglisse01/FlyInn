@@ -1,3 +1,7 @@
 controllers:
-    resource: ../src/Controller/
-    type: attribute
+  resource: ../src/Controller/
+  type: attribute
+
+login_check:
+  path: /api/login_check
+  methods: [POST]
