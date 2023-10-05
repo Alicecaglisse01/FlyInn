@@ -55,6 +55,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $autresInformations;
 
+    /**
+     * @ORM\Column(type="date", name="ddn", nullable=true)
+     */
+    private $ddn;
+
     // ... getters, setters, and UserInterface methods
 
     public function getRoles(): array
@@ -63,6 +68,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // Vous voudrez peut-être ajuster cette logique en fonction de votre application
         return ['ROLE_USER'];
     }
+
+
 
     public function getPassword(): ?string
     {
@@ -86,4 +93,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // Cette méthode devrait retourner un identifiant unique pour l'utilisateur, comme l'email
         return $this->email;
     }
+
+    public function getDdn(): ?\DateTimeInterface
+    {
+        return $this->ddn;
+    }
+
+    public function setDdn(?\DateTimeInterface $ddn): self
+    {
+        $this->ddn = $ddn;
+
+        return $this;
+    }
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+        return $this;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+        return $this;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function setMotDePasse(string $motDePasse): self
+    {
+        $this->motDePasse = $motDePasse;
+        return $this;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+        return $this;
+    }
+    // src/Entity/User.php
+
+    // ... autres propriétés et méthodes
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    // ... autres getters et setters
+
 }
