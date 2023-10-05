@@ -4,9 +4,14 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ChambreRepository;
+use App\Entity\Chambre;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ChambreController extends AbstractController
 {
@@ -37,5 +42,37 @@ class ChambreController extends AbstractController
         }
 
         return $this->json($data);
+    }
+    /**
+     * @Route("/chambres/add", name="chambre_add", methods={"POST"})
+     */
+    /**
+     * @Route("/chambres/add", name="chambre_add", methods={"POST"})
+     */
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $chambre = new Chambre();
+        $chambre->setTitreChambre($data['titre_chambre']);
+        $chambre->setDescriptionChambre($data['description_chambre']);
+        $chambre->setPrixMensuel($data['prix_mensuel']);
+        $chambre->setDisponibilite($data['disponibilite']);
+        $chambre->setAdresseChambre($data['adresse_chambre']);
+        $chambre->setPhoto($data['photo']);
+
+        $proprietaireId = $data['proprietaire_id'];
+        $proprietaire = $entityManager->getRepository(User::class)->find($proprietaireId);
+        if ($proprietaire) {
+            $chambre->setProprietaire($proprietaire);
+        }
+
+        $entityManager->persist($chambre);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Chambre ajoutée avec succès',
+            'chambre_id' => $chambre->getId(),
+        ]);
     }
 }
